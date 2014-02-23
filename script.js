@@ -1,32 +1,13 @@
 
 (function(){
 
-    function surroundingCells(cells, row, col){
+    function surroundingCells(cells, r, c){
         var near = [];
-        if(cells[(row-1)+'_'+(col-1)]){
-            near.push(cells[(row-1)+'_'+(col-1)]);
-        }
-        if(cells[(row-1)+'_'+(col)]){
-            near.push(cells[(row-1)+'_'+(col)]);
-        }
-        if(cells[(row-1)+'_'+(col+1)]){
-            near.push(cells[(row-1)+'_'+(col+1)]);
-        }
-        if(cells[(row)+'_'+(col-1)]){
-            near.push(cells[(row)+'_'+(col-1)]);
-        }
-        if(cells[(row)+'_'+(col+1)]){
-            near.push(cells[(row)+'_'+(col+1)]);
-        }
-        if(cells[(row+1)+'_'+(col-1)]){
-            near.push(cells[(row+1)+'_'+(col-1)]);
-        }
-        if(cells[(row+1)+'_'+(col)]){
-            near.push(cells[(row+1)+'_'+(col)]);
-        }
-        if(cells[(row+1)+'_'+(col+1)]){
-            near.push(cells[(row+1)+'_'+(col+1)]);
-        }
+        $.each([[r-1,c-1],[r-1, c],[r-1, c+1],[r, c-1],[r, c+1],[r+1, c-1],[r+1, c],[r+1, c+1]], function(i, v) {
+            if(cells[v[0]+'_'+v[1]]){
+                near.push(cells[v[0]+'_'+v[1]]);
+            }
+        });
         return near;
     }
 
