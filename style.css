@@ -22,3 +22,18 @@ h2 {
     cursor: pointer;
     text-align: center;
 }
+
+.bomb {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.red {
+    color:#ff0000;
+}
+.green {
+    color:#00ff00;
+}
+.blue {
+    color:#0000ff;
+}
