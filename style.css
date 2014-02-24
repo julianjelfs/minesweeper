@@ -37,3 +37,11 @@ h2 {
 .blue {
     color:#0000ff;
 }
+
+.show {
+    background-color: #caffc5;
+}
+
+.flagged {
+    background-color: #fffd6f;
+}

@@ -39,6 +39,38 @@
             }
         }
 
+        function show(c){
+            c.shown = true;
+            c.div.addClass('show').html(c.nearby ? c.nearby : '');
+        }
+
+        function flag(c){
+            if(c.shown) { return; }
+            c.flagged = !c.flagged;
+            c.div.toggleClass('flagged');
+        }
+
+        function clickCell(c){
+            if(c.flagged){
+                return;
+            }
+            if(c.bomb){
+                c.div.html('!');
+                alert('Kaboom!');
+            } else {
+                if(c.nearby > 0 && !c.shown) {
+                    show(c);
+                } else {
+                    if(c.nearby === 0 && !c.shown){
+                        show(c);
+                        $.each(surroundingCells(cells, c.row, c.col), function(i, n){
+                            clickCell(n);
+                        });
+                    }
+                }
+            }
+        }
+
         for(var row= 0, cell=0; row<size; row++) {
             for(var col=0; col<size; col++) {
                 var key = row+'_'+col;
@@ -49,12 +81,14 @@
                         }
                     });
                 }
-                $('<div class="cell"/>').width(dim).height(dim)
-                    .html(cells[key].bomb?'<span class="bomb">x</span>':(cells[key].nearby > 0 ? cells[key].nearby : ''))
+                cells[key].div = $('<div id="'+ key +'" class="cell"/>').width(dim).height(dim)
+                    //.html(cells[key].bomb?'<span class="bomb">x</span>':(cells[key].nearby > 0 ? cells[key].nearby : ''))
                     .appendTo(stage).click((function(k){
-                        return function(){
-                            if(cells[k].bomb){
-                                alert('Kaboom!');
+                        return function(e){
+                            if(e.ctrlKey) {
+                                flag(cells[k]);
+                            } else {
+                                clickCell(cells[k]);
                             }
                         };
                     })(key));
