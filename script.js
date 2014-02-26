@@ -13,11 +13,23 @@
 
     function init(){
         var size = $('#size').val(),
-            bombs = $('#bombs').val(),
+            find = bombs = parseInt($('#bombs').val(), 10),
             stage = $('#stage').empty(),
+            count = $('#count'),
+            timer = $('#timer'),
             dim = 400 / size,
             bombCells = [],
-            cell = 0;
+            cell = 0,
+            correctlyFlagged=0,
+            flagged= 0,
+            start = new Date();
+
+        function updateTimer(timestamp){
+            timer.text(Math.floor((+new Date() - start) / 1000));
+            requestAnimationFrame(updateTimer);
+        }
+
+        requestAnimationFrame(updateTimer);
 
         while(bombs > 0){
             var c = Math.floor(Math.random()*size*size);
@@ -46,7 +58,15 @@
 
         function flag(c){
             if(c.shown) { return; }
+            if(c.bomb) {
+                correctlyFlagged = c.flagged ? (correctlyFlagged - 1) : (correctlyFlagged + 1);
+                if(correctlyFlagged === find){
+                    alert('Congratulations you solved the puzzle');
+                }
+            }
             c.flagged = !c.flagged;
+            flagged = c.flagged ? (flagged + 1) : (flagged - 1);
+            count.text(flagged);
             c.div.toggleClass('flagged');
         }
 
@@ -82,7 +102,6 @@
                     });
                 }
                 cells[key].div = $('<div id="'+ key +'" class="cell"/>').width(dim).height(dim)
-                    //.html(cells[key].bomb?'<span class="bomb">x</span>':(cells[key].nearby > 0 ? cells[key].nearby : ''))
                     .appendTo(stage).click((function(k){
                         return function(e){
                             if(e.ctrlKey) {
